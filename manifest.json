@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Youtube Kodi Cast",
+    "description": "Simple Cast Video or Playlist to Kodi",
+    "version": "0.1",
+    "content_scripts": [
+      {
+        "matches": ["https://*.youtube.com/*"],
+        "js": ["youtubeCast.js"]
+      }
+    ],
+    "permissions": [
+      "activeTab","tabs", "https://*.youtube.com/*","storage"
+    ],
+  
+    
+    "browser_action": {
+      "default_title": "Youtube Kodi Cast",
+      "default_popup": "options.html",
+      "default_icon": {
+        "19": "img/sub19.png",
+        "38": "img/sub38.png",
+        "128": "img/sub128.png"
+      }
+    }
+  }

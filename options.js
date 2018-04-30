@@ -43,27 +43,18 @@ const appendHtml = html => {
     } else {
       chrome.storage.local.remove("kodiIp", function(reso) {
         document.body.removeChild(document.querySelector(".container"));
-        console.log("clearing");
 
         chrome.storage.local.remove("kodiPort", function() {
-          console.log("clearing");
-
-          chrome.storage.sync.get("kodiIp", res => {
-            console.log(res);
-          });
+          chrome.storage.sync.get("kodiIp", res => {});
           appendHtml(blankHtml);
         });
       });
     }
   });
 
-  console.log("sending message");
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    console.log(tabs[0]);
-
     if (tabs[0].url.includes("youtube.com/watch")) {
       chrome.storage.sync.get("kodiIp", ip => {
-        console.log("re", ip.kodiIp);
         chrome.storage.sync.get("kodiPort", port => {
           let vidId = tabs[0].url.match(/v=\w+/)[0].replace("v=", "");
           let url = `${ip.kodiIp}:${port.kodiPort}/jsonrpc?request=`;
@@ -81,7 +72,7 @@ const appendHtml = html => {
 const addKodiDetails = () => {
   let ip = document.querySelectorAll("input")[0].value;
   let port = document.querySelectorAll("input")[1].value;
-  console.log("getting ip");
+
   if (!ip || !port) {
     console.log("details invalid,please retry");
     document.querySelectorAll("input")[0].value = "";
@@ -91,7 +82,6 @@ const addKodiDetails = () => {
 
   chrome.storage.sync.set({ kodiIp: ip }, res => {});
   chrome.storage.sync.set({ kodiPort: port }, res => {
-    console.log(res);
     document.body.removeChild(document.querySelector(".container"));
     appendHtml(fulfilledHtml);
   });

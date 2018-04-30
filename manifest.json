@@ -4,12 +4,8 @@
     "name": "Youtube Kodi Cast",
     "description": "Simple Cast Video or Playlist to Kodi",
     "version": "0.1",
-    "content_scripts": [
-      {
-        "matches": ["https://*.youtube.com/*"],
-        "js": ["youtubeCast.js"]
-      }
-    ],
+    
+    
     "permissions": [
       "activeTab","tabs", "https://*.youtube.com/*","storage"
     ],

@@ -81,9 +81,10 @@ const addKodiDetails = () => {
     return;
   }
 
-  chrome.storage.sync.set({ kodiIp: ip }, res => {});
-  chrome.storage.sync.set({ kodiPort: port }, res => {
-    document.body.removeChild(document.querySelector(".container"));
-    appendHtml(fulfilledHtml);
+  chrome.storage.sync.set({ kodiIp: ip }, res => {
+    chrome.storage.sync.set({ kodiPort: port }, res => {
+      document.body.removeChild(document.querySelector(".container"));
+      appendHtml(fulfilledHtml);
+    });
   });
 };

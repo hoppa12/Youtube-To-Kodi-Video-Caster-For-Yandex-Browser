@@ -45,8 +45,9 @@ const appendHtml = html => {
         document.body.removeChild(document.querySelector(".container"));
 
         chrome.storage.local.remove("kodiPort", function() {
-          chrome.storage.sync.get("kodiIp", res => {});
-          appendHtml(blankHtml);
+          chrome.storage.sync.remove("kodiIp", res => {
+            appendHtml(blankHtml);
+          });
         });
       });
     }

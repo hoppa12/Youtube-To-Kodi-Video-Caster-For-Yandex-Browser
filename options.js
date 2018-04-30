@@ -41,8 +41,19 @@ const appendHtml = html => {
       addKodiDetails();
       return;
     } else {
-      document.body.removeChild(document.querySelector(".container"));
-      appendHtml(blankHtml);
+      chrome.storage.local.remove("kodiIp", function(reso) {
+        document.body.removeChild(document.querySelector(".container"));
+        console.log("clearing");
+
+        chrome.storage.local.remove("kodiPort", function() {
+          console.log("clearing");
+
+          chrome.storage.sync.get("kodiIp", res => {
+            console.log(res);
+          });
+          appendHtml(blankHtml);
+        });
+      });
     }
   });
 
@@ -51,10 +62,17 @@ const appendHtml = html => {
     console.log(tabs[0]);
 
     if (tabs[0].url.includes("youtube.com/watch")) {
-      chrome.tabs.sendMessage(tabs[0].id, { action: "getURL" }, function(
-        response
-      ) {
-        fetch(response.url).catch(err => err);
+      chrome.storage.sync.get("kodiIp", ip => {
+        console.log("re", ip.kodiIp);
+        chrome.storage.sync.get("kodiPort", port => {
+          let vidId = tabs[0].url.match(/v=\w+/)[0].replace("v=", "");
+          let url = `${ip.kodiIp}:${port.kodiPort}/jsonrpc?request=`;
+          url += encodeURIComponent(
+            `{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"plugin://plugin.video.youtube/?action=play_video&videoid=${vidId}"}}}`
+          );
+
+          fetch(url).catch(err => err);
+        });
       });
     }
   });
@@ -63,7 +81,7 @@ const appendHtml = html => {
 const addKodiDetails = () => {
   let ip = document.querySelectorAll("input")[0].value;
   let port = document.querySelectorAll("input")[1].value;
-  console.log("Hrer");
+  console.log("getting ip");
   if (!ip || !port) {
     console.log("details invalid,please retry");
     document.querySelectorAll("input")[0].value = "";

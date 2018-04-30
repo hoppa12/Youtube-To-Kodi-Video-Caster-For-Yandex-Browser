@@ -2,12 +2,12 @@ let blankHtml = `<div class="container">
        <h1> Youtube to Kodi</h1>
    <div class="elem">
    <div class="details">Please Enter Your Kodi IP Address</div>
-   <input placeholder="example http://192.168"  type="text"/> 
+   <input placeholder="example 192.168"  type="text"/> 
 </div>
 
 <div class="elem">
        <div class="details">Please Enter Your Kodi Port Address</div>
-       <input  type="text"/> 
+       <input  type="number"/> 
    </div>
 
    <div class="elem">
@@ -55,14 +55,17 @@ const appendHtml = html => {
 
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs[0].url.includes("youtube.com/watch")) {
+       
       chrome.storage.sync.get("kodiIp", ip => {
+       
         chrome.storage.sync.get("kodiPort", port => {
+           
           let vidId = tabs[0].url.match(/v=\w+/)[0].replace("v=", "");
-          let url = `${ip.kodiIp}:${port.kodiPort}/jsonrpc?request=`;
+          let url = `http://${ip.kodiIp}:${port.kodiPort}/jsonrpc?request=`;
           url += encodeURIComponent(
             `{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"plugin://plugin.video.youtube/?action=play_video&videoid=${vidId}"}}}`
           );
-
+          
           fetch(url).catch(err => err);
         });
       });
@@ -73,16 +76,16 @@ const appendHtml = html => {
 const addKodiDetails = () => {
   let ip = document.querySelectorAll("input")[0].value;
   let port = document.querySelectorAll("input")[1].value;
-
-  if (!ip || !port) {
-    console.log("details invalid,please retry");
+   
+  if ( ip === "" && port ===  "") {
+    
     document.querySelectorAll("input")[0].value = "";
     document.querySelectorAll("input")[1].value = "";
     return;
   }
 
   chrome.storage.sync.set({ kodiIp: ip }, res => {
-    chrome.storage.sync.set({ kodiPort: port }, res => {
+    chrome.storage.sync.set({ kodiPort: port }, resTwo => {
       document.body.removeChild(document.querySelector(".container"));
       appendHtml(fulfilledHtml);
     });

@@ -11,7 +11,7 @@ let blankHtml = `<div class="container">
    </div>
 
    <div class="elem">
-           <button class="submit" onClick="addKodiDetails()" style="background-color:indianred;"> Click </button>
+           <button class="submit" style="background-color:indianred;"> Click </button>
        </div>
    </div>`;
 

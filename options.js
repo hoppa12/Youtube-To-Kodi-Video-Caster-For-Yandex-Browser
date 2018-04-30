@@ -2,7 +2,7 @@ let blankHtml = `<div class="container">
        <h1> Youtube to Kodi</h1>
    <div class="elem">
    <div class="details">Please Enter Your Kodi IP Address</div>
-   <input placeholder="example 192.168"  type="text"/> 
+   <input placeholder="example 192.168.1.12"  type="text"/> 
 </div>
 
 <div class="elem">
